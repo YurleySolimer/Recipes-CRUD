@@ -202,12 +202,23 @@ INSERT INTO ingredients (name) VALUES('Yuca');
 INSERT INTO ingredients (name) VALUES('Zanahoria');
 
 
-
-SELECT r.title AS 'Recipe', r.steps, ri.amount AS 'Amount', mu.measure AS 'Unit of Measure', i.name AS 'Ingredient' 
+CREATE VIEW recipeComplete AS
+SELECT r.title AS 'Recipe', r.description, r.created_at, r.steps, ri.amount AS 'Amount', mu.measure AS 'Measure', i.name AS 'Ingredient' 
 FROM recipes r 
 JOIN recipeIngredients ri on r.id = ri.recipe_id 
 JOIN ingredients i on i.id = ri.ingredient_id 
 LEFT OUTER JOIN measures mu on mu.id = measure_id;
+
+CREATE VIEW recipeCompleteID AS
+SELECT r.title AS 'Recipe', r.description, r.created_at, r.steps, r.id, ri.recipe_id, ri.amount AS 'Amount', mu.measure AS 'Measure', i.name AS 'Ingredient' 
+FROM recipes r 
+JOIN recipeIngredients ri on r.id = ri.recipe_id 
+JOIN ingredients i on i.id = ri.ingredient_id 
+LEFT OUTER JOIN measures mu on mu.id = measure_id;
+
+SELECT * FROM recipes ORDER BY created_at DESC LIMIT 9;
+
+SELECT * FROM recipes WHERE title LIKE "%   %" OR steps LIKE "%   %";
 
 
 

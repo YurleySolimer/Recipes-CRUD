@@ -8,7 +8,23 @@ const { isLoggedIn } = require('../lib/auth');
 router.get('/add', isLoggedIn, async (req, res) => {
 	const measure = await pool.query('SELECT * FROM measures');
 	const ingredient = await pool.query('SELECT * FROM ingredients');
+	const {otro} = req.body;
+	console.log(otro);
 	res.render('recipes/add.hbs', {measure, ingredient});
+
+});
+
+
+router.get('/steps/:id', isLoggedIn, async (req, res) => {
+	const { id } = req.params;
+	const recipes = await pool.query('SELECT * FROM recipes WHERE id =?', id); //Ruta a los links creados
+    const recipeComplete = await pool.query('SELECT * FROM recipeCompleteID WHERE id=?');
+	
+	console.log(id);
+    console.log(recipes);
+    console.log(recipeComplete);
+    res.send('Yes');
+	//res.render('recipes/steps.hbs', {recipeComplete, recipes});
 
 });
 
@@ -60,14 +76,8 @@ router.post('/add', isLoggedIn, async (req, res) => {
 
 router.get('/', isLoggedIn, async (req, res) => {
 	const recipes = await pool.query('SELECT * FROM recipes WHERE user_id = ?', [req.user.id]); //Ruta a los links creados
-    var recipeComplete = [];
-    for (var i = 0; i < recipes.length; i++) {
-    	console.log(recipes[0].id)
-    	recipeComplete[i] = await pool.query('SELECT * FROM recipeIngredients WHERE recipe_id = ?', [recipes[i].id]); 
-    }
-
-    await pool.query('SELECT r.title AS 'Recipe', r.steps, ri.amount AS 'Amount', mu.measure AS 'Unit of Measure', i.name AS 'Ingredient' FROM recipes r JOIN recipeIngredients ri on r.id = ri.recipe_id JOIN ingredients i on i.id = ri.ingredient_id LEFT OUTER JOIN measures mu on mu.id = measure_id');
-
+    const recipeComplete = await pool.query('SELECT * FROM recipeCompleteID');
+    console.log(recipeComplete);
 
 	res.render('recipes/list.hbs', {recipes, recipeComplete}); 
 });

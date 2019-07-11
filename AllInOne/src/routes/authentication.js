@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 
+const pool = require('../database');
+
 const passport = require('passport');
 const { isLoggedIn, isNotLoggedIn } = require('../lib/auth');
 
@@ -26,8 +28,9 @@ router.post('/signin', isNotLoggedIn, (req, res, next) => {
 	})(req, res, next);
 });
 
-router.get('/profile', isLoggedIn, (req,res) => {
-	res.render('profile'); 
+router.get('/profile', isLoggedIn, async (req,res) => {
+	const lastRecipes = await pool.query('SELECT * FROM recipes ORDER BY created_at DESC LIMIT 9');
+	res.render('profile', {lastRecipes}); 
 });
 
 router.get('/logout', isLoggedIn, (req,res) => {

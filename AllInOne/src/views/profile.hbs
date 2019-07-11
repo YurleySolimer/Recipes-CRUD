@@ -1,15 +1,48 @@
-<div class="container p-4">
-    <div class="row">
-        <div class="col-md-4 mx-auto">
-            <div class="card text-center">
-                <div class="card-body">
-                    <h3>Welcome {{user.fullname}}</h3>
-                    <h4>{{user.username}}</h4>
-                    <a href="/recipes" class="btn btn-primary m-4">
-                        Save your Recipes    
-                    </a>
-                </div>
-            </div>
-        </div>
+<div class="container">
+	<h3 class="text-center text-info">Welcome {{user.fullname}}</h3>
+    <div class="row text-light text-center">
+    	<div class="col-md-9">
+    		<h5>Últimas Recetas Agregadas</h5>
+
+			<div class="container p-4">
+				<div class="row">
+					{{#each lastRecipes}}
+						<div class="col-md-4">
+							<div class="card text-center">
+								<div class="card-body">
+									<a href="/recipes/steps/{{id}}"class="card-title text-uppercase"> 
+										{{title}}
+									</a> 		
+
+									<p class="m-2">
+										{{description}} 	
+									</p>
+											
+									</p>	
+										{{timeago created_at}}
+									</p>
+					
+									<a href="/recipes/delete/{{id}}" class="btn btn-danger"> Delete</a>
+									<a href="/recipes/edit/{{id}}" class="btn btn-secondary"> Edit</a>
+								</div>
+							</div>
+						</div>
+
+						{{else}}
+							<div class="col-md-4 mx-auto">
+								<div class="card card-body text-center">
+									<p> No hay recipes creados </p>
+									<a href="/recipes/add"> Agrega un nuevo recipe </a>
+								</div>					
+							</div>
+					{{/each}}
+				</div>	
+			</div>
+
+    	</div>
+    	<div class="col-md-3 bg-info">
+    		<h5>Recetas Favoritas</h5>
+    	</div>
+                    
     </div>
 </div>

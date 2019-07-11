@@ -1,0 +1,43 @@
+<div class="container p-4">
+	<div class="row">
+		<div class="col-md-6">
+			<div class="card text-center">
+				<div class="card-body">
+					<h4 class="m-2"> INGREDIENTES</h4>
+					{{#each recipeComplete}}	
+						<div class="container">
+							<div class="row">
+								<div class="col-md-4">
+									<p>	{{Amount}}</p>
+								</div>
+								<div class="col-md-4">
+									<p>	{{Measure}}</p>
+								</div>
+								<div class="col-md-4">
+									<p>	{{Ingredient}}</p>
+								</div>
+								
+							</div>									
+						</div>					
+																		
+					{{/each}}
+				</div>
+			</div>
+		</div>
+
+		<div class="col-md-6">
+			<div class="card text-center">
+				<div class="card-body">
+					<h4 class="m-2"> PREPARACION</h4>	
+					{{#each recipes}}						
+						<p>
+							{{steps}} 	
+						</p>						
+					{{/each}}
+				</div>
+			</div>
+		</div>
+	</div>	
+			<a href="/recipes/delete/{{id}}" class="btn btn-danger"> Delete</a>
+		<a href="/recipes/edit/{{id}}" class="btn btn-secondary"> Edit</a>
+</div>
