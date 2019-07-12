@@ -38,18 +38,6 @@ CREATE TABLE recipes (
 DESCRIBE recipes;
 
 
---FAVORITES TABLE
-
-CREATE TABLE favs (
-	id INT(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
-	user_id INT(11),
-	recipe_id INT(11),
-	CONSTRAINT fk_user2 FOREIGN KEY  (user_id) REFERENCES users(id),
-	CONSTRAINT fk_recipe FOREIGN KEY  (recipe_id) REFERENCES recipes(id)
-);
-
-DESCRIBE favs;
-
 CREATE TABLE measures (
 	id INT(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
 	measure VARCHAR(30) NOT NULL UNIQUE
@@ -80,6 +68,8 @@ CREATE TABLE recipeIngredients (
 --INSERSIONCES
 
 INSERT INTO measures (measure) VALUES('Cucharada'), ('Gramos'), ('Kilogramos'), ('Litro'), ('Pizca'), ('Taza');
+
+INSERT INTO categories (category) VALUES('Appetizers'), ('Arroz y Pastas'), ('Aves y Carnes'), ('Bebidas y Tragos'), ('Ensaladas'), ('Entradas'),('Mariscos y Pescados'), ('Panes y Masas'), ('Postres y Reposteria'), ('Snacks'), ('Vegetariano y Vegano');
 
 
 INSERT INTO ingredients (name) VALUES('Agua');

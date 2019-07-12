@@ -8,8 +8,7 @@ const { isLoggedIn } = require('../lib/auth');
 router.get('/add', isLoggedIn, async (req, res) => {
 	const measure = await pool.query('SELECT * FROM measures');
 	const ingredient = await pool.query('SELECT * FROM ingredients');
-	const {otro} = req.body;
-	console.log(otro);
+
 	res.render('recipes/add.hbs', {measure, ingredient});
 
 });
@@ -18,15 +17,12 @@ router.get('/add', isLoggedIn, async (req, res) => {
 router.get('/steps/:id', isLoggedIn, async (req, res) => {
 	const { id } = req.params;
 	const recipes = await pool.query('SELECT * FROM recipes WHERE id =?', id); //Ruta a los links creados
-    const recipeComplete = await pool.query('SELECT * FROM recipeCompleteID WHERE id=?');
-	
-	console.log(id);
-    console.log(recipes);
-    console.log(recipeComplete);
-    res.send('Yes');
-	//res.render('recipes/steps.hbs', {recipeComplete, recipes});
+    const recipeComplete = await pool.query('SELECT * FROM recipeCompleteID WHERE id=?', id);
+    
+	res.render('recipes/steps.hbs', {recipeComplete, recipes});
 
 });
+
 
 router.post('/add', isLoggedIn, async (req, res) => {
 
@@ -37,6 +33,8 @@ router.post('/add', isLoggedIn, async (req, res) => {
         steps,
         user_id: req.user.id
     };
+
+    console.log(req.body);
 
     await pool.query('INSERT INTO recipes set ?', [newRecipe]); //agregar datos a la db
     const recipe_id = await pool.query('SELECT id FROM recipes WHERE title = ?', [newRecipe.title]);
@@ -55,17 +53,19 @@ router.post('/add', isLoggedIn, async (req, res) => {
    var recipeIng;
 
     for (var i = 0; i < name.length; i++) {
-    	ingredient_id[i] = await pool.query('SELECT id FROM ingredients WHERE name = ?', [name[i]]);
-    	measure_id[i] = await pool.query('SELECT id FROM measures WHERE measure = ?', [measure[i]]);
-    	
-        recipeIng = {   
-        	measure_id: measure_id[i][0].id,
-         	ingredient_id: ingredient_id[i][0].id,
-         	recipe_id: recipe_id[0].id,
-         	amount: newAmount.amount[i]
+    	if (name[i] != "Elige") {
+	    	ingredient_id[i] = await pool.query('SELECT id FROM ingredients WHERE name = ?', [name[i]]);
+	    	measure_id[i] = await pool.query('SELECT id FROM measures WHERE measure = ?', [measure[i]]);
+	    	
+	        recipeIng = {   
+	        	measure_id: measure_id[i][0].id,
+	         	ingredient_id: ingredient_id[i][0].id,
+	         	recipe_id: recipe_id[0].id,
+	         	amount: newAmount.amount[i]
+	        }
+	             await pool.query('INSERT INTO recipeIngredients set ?', [recipeIng]);
+   
         }
-        
-        await pool.query('INSERT INTO recipeIngredients set ?', [recipeIng]);
     }
 
     req.flash('success', 'Recipe Saved Successfully'); 
