@@ -10,6 +10,14 @@
 						<div class="form-group">
 							<textarea class="form-control" name="description" rows="3" placeholder="Descripción"></textarea>	
 						</div>
+						<div class="input-group-prepend">
+						    		<select class="custom-select" id="category" name="category">	   		
+								    	<option selected>Elige</option>
+								    	{{#each category}}
+								    		<option>{{category}}</option>
+								    	{{/each}}
+								  </select>
+								</div>
 
 	
 						<div class="form-row input-group">

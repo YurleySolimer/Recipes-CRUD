@@ -3,19 +3,19 @@
 
 		{{#each recipes}}
 
-			<div class="col-md-4 mt-4">
+			<div class="col-md-3 mt-4">
 				<div class="card text-center">
 					<div class="card-body">
 
-						<a href="/recipes/steps/{{id}}"class="card-title text-uppercase"> 
+						<a href="/recipes/steps/{{id}}"class="card-title text-uppercase links"> 
 							{{title}}  <!--renderiza titulo del link-->
-						</a> 			
+						</a> 								
 
 						<p class="m-2">
 							{{description}} <!--mostrar descripcion-->
 						</p>						
 							
-						</p>	
+						<p class="links">	
 							{{timeago created_at}}
 						</p>
 		

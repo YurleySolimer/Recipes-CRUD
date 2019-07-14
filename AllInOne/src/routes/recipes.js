@@ -8,8 +8,8 @@ const { isLoggedIn } = require('../lib/auth');
 router.get('/add', isLoggedIn, async (req, res) => {
 	const measure = await pool.query('SELECT * FROM measures');
 	const ingredient = await pool.query('SELECT * FROM ingredients');
-
-	res.render('recipes/add.hbs', {measure, ingredient});
+	const category = await pool.query('SELECT * FROM categories');
+	res.render('recipes/add.hbs', {measure, ingredient, category});
 
 });
 
@@ -25,16 +25,18 @@ router.get('/steps/:id', isLoggedIn, async (req, res) => {
 
 
 router.post('/add', isLoggedIn, async (req, res) => {
+	const {category} = req.body;
+	const category_id = await pool.query('SELECT id FROM categories WHERE category = ?', [category]);
+	console.log(category_id);
 
 	const {title, description, steps} = req.body;
     const newRecipe = {
         title,
+        category_id : category_id[0].id,
         description,
         steps,
         user_id: req.user.id
     };
-
-    console.log(req.body);
 
     await pool.query('INSERT INTO recipes set ?', [newRecipe]); //agregar datos a la db
     const recipe_id = await pool.query('SELECT id FROM recipes WHERE title = ?', [newRecipe.title]);
@@ -73,13 +75,11 @@ router.post('/add', isLoggedIn, async (req, res) => {
 	//res.send('done');
 });
 
-
 router.get('/', isLoggedIn, async (req, res) => {
 	const recipes = await pool.query('SELECT * FROM recipes WHERE user_id = ?', [req.user.id]); //Ruta a los links creados
     const recipeComplete = await pool.query('SELECT * FROM recipeCompleteID');
-    console.log(recipeComplete);
-
-	res.render('recipes/list.hbs', {recipes, recipeComplete}); 
+    const recipeCate = await pool.query('SELECT * FROM recipeCate');
+	res.render('recipes/list.hbs', {recipes, recipeComplete, recipeCate}); 
 });
 
 router.get('/delete/:id', isLoggedIn, async (req, res) => {
@@ -100,11 +100,11 @@ router.get('/edit/:id', isLoggedIn, async (req, res) => {
 
 router.post('/edit/:id', isLoggedIn, async (req, res) => {
 	const { id } = req.params;
-	const { title, description, url } = req.body;
+	const { title, description, steps } = req.body;
 	const newRecipe = {
 		title,
 		description,
-		url
+		steps
 	};
 	await pool.query('UPDATE recipes set ? WHERE id = ?', [newRecipe, id]); //Actualizar datos editados
 	req.flash('success', 'Recipe Updated Successfully');

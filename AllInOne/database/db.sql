@@ -206,6 +206,13 @@ JOIN recipeIngredients ri on r.id = ri.recipe_id
 JOIN ingredients i on i.id = ri.ingredient_id 
 LEFT OUTER JOIN measures mu on mu.id = measure_id;
 
+
+CREATE VIEW recipeCate AS
+SELECT r.title, r.description, r.created_at, r.steps, r.id, rc.category 
+FROM recipes r
+JOIN categories rc on r.category_id = rc.id;
+
+
 SELECT * FROM recipes ORDER BY created_at DESC LIMIT 9;
 
 SELECT * FROM recipes WHERE title LIKE "%   %" OR steps LIKE "%   %";
